@@ -22,22 +22,16 @@ repositories {
 extra["snippetsDir"] = file("build/generated-snippets")
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-data-ldap")
-	implementation("org.springframework.boot:spring-boot-starter-oauth2-authorization-server")
-	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.springframework.data:spring-data-rest-hal-explorer")
 	implementation("org.springframework.session:spring-session-core")
+	implementation("org.springframework.boot:spring-boot-starter-web")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
-	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
