@@ -1,1 +1,1 @@
-rootProject.name = "KawaiiAuth"
+rootProject.name = "kawaiiauth"
