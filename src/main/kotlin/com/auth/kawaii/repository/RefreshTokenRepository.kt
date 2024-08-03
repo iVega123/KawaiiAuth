@@ -1,17 +1,9 @@
 package com.auth.kawaii.repository
 
-import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.stereotype.Repository
+import com.auth.kawaii.model.RefreshToken
+import org.springframework.data.jpa.repository.JpaRepository
+import java.util.Optional
 
-@Repository
-class RefreshTokenRepository {
-
-    private val tokens = mutableMapOf<String, UserDetails>()
-
-    fun findUserDetailsByToken(token: String): UserDetails? =
-        tokens[token]
-
-    fun save(token: String, userDetails: UserDetails){
-        tokens[token] = userDetails
-    }
+interface RefreshTokenRepository : JpaRepository<RefreshToken, Long> {
+    fun findByToken(token: String): Optional<RefreshToken>
 }

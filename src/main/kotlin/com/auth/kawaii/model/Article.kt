@@ -1,11 +1,19 @@
 package com.auth.kawaii.model
 
+import jakarta.persistence.*
 import java.util.UUID
 
-data class Article(
-    val id: UUID,
+@Entity
+@Table(name = "articles")
+class Article(
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @Column(updatable = false, nullable = false)
+    val id: UUID = UUID.randomUUID(),
+
+    @Column(nullable = false)
     val title: String,
-    val content: String,
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    val content: String
 )
-
-
