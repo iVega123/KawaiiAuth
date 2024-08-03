@@ -36,7 +36,7 @@ class JwtAuthenticationFilter(
         if (email != null && SecurityContextHolder.getContext().authentication == null) {
             val foundUser = userDetailsService.loadUserByUsername(email)
 
-            if (tokenService.isExpired(jwtToken)) {
+            if (!tokenService.isExpired(jwtToken)) {
                 updateContext(foundUser, request)
             }
         }
