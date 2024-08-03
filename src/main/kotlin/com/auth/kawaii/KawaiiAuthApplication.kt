@@ -15,6 +15,6 @@ import org.springframework.boot.runApplication
 class KawaiiAuthApplication
 
 fun main(args: Array<String>) {
-	runApplication<com.auth.kawaii.KawaiiAuthApplication>(*args)
+	runApplication<KawaiiAuthApplication>(*args)
 }
 
