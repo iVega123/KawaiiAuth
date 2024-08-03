@@ -16,7 +16,7 @@ class AuthController(
 
     @PostMapping
     fun authenticate(@RequestBody authRequest: AuthenticationRequest): AuthenticationResponse =
-        authenticationService.authentication(authRequest)
+        authenticationService.authenticate(authRequest)
 
     @PostMapping("/refresh")
     fun refreshAccessToken(

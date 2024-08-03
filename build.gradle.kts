@@ -5,12 +5,12 @@ plugins {
 	kotlin("plugin.spring") version "1.9.24"
 }
 
-group = "com.cordersee"
+group = "com.auth.kawaii"
 version = "0.0.1-SNAPSHOT"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
+		languageVersion.set(JavaLanguageVersion.of(21))
 	}
 }
 
@@ -26,6 +26,12 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt-api:0.12.3")
 	implementation("io.jsonwebtoken:jjwt-impl:0.12.3")
 	implementation("io.jsonwebtoken:jjwt-jackson:0.12.3")
+
+	implementation("org.springdoc:springdoc-openapi-starter-common:2.6.0")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.3.2")
+	implementation("org.postgresql:postgresql:42.7.3")
 
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	testImplementation("org.springframework.security:spring-security-test")
