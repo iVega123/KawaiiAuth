@@ -4,10 +4,10 @@ import com.auth.kawaii.model.Role
 import com.auth.kawaii.model.User
 import com.auth.kawaii.service.UserService
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.server.ResponseStatusException
 import java.util.*
 
 @SecurityRequirement(name = "bearerAuth")
@@ -16,15 +16,13 @@ import java.util.*
 class UserController(private val userService: UserService) {
 
     @PostMapping
-    fun create(@RequestBody userRequest: UserRequest): ResponseEntity<UserResponse> {
+    fun create(@Valid @RequestBody userRequest: UserRequest): ResponseEntity<String> {
         val user = userService.createUser(userRequest.toModel(Role.User))
-        return user?.let {
-            ResponseEntity.ok(it.toResponse())
-        } ?: ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null)
+        return ResponseEntity.ok("User Criado !")
     }
 
     @PostMapping("/admin")
-    fun createAdmin(@RequestBody userRequest: UserRequest): ResponseEntity<UserResponse> {
+    fun createAdmin(@Valid @RequestBody userRequest: UserRequest): ResponseEntity<UserResponse> {
         val user = userService.createUser(userRequest.toModel(Role.Admin))
         return user?.let {
             ResponseEntity.ok(it.toResponse())
@@ -39,8 +37,8 @@ class UserController(private val userService: UserService) {
     fun findByUUID(@PathVariable uuid: UUID): ResponseEntity<UserResponse> =
         userService.findByUUID(uuid).map { user ->
             ResponseEntity.ok(user.toResponse())
-        }.orElseThrow {
-            ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        }.orElseGet {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).build()
         }
 
     @DeleteMapping("/{uuid}")

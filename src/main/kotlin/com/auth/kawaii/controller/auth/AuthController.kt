@@ -1,6 +1,7 @@
 package com.auth.kawaii.controller.auth
 
 import com.auth.kawaii.service.AuthenticationService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
