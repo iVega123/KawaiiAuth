@@ -18,14 +18,14 @@ class UserController(private val userService: UserService) {
     @PostMapping
     fun create(@Valid @RequestBody userRequest: UserRequest): ResponseEntity<String> {
         val user = userService.createUser(userRequest.toModel(Role.User))
-        return ResponseEntity.ok("User Criado !")
+        return ResponseEntity.ok("usuario Criado com sucesso !")
     }
 
     @PostMapping("/admin")
-    fun createAdmin(@Valid @RequestBody userRequest: UserRequest): ResponseEntity<UserResponse> {
+    fun createAdmin(@Valid @RequestBody userRequest: UserRequest): ResponseEntity<out String> {
         val user = userService.createUser(userRequest.toModel(Role.Admin))
         return user?.let {
-            ResponseEntity.ok(it.toResponse())
+            ResponseEntity.ok("admin criado com sucesso")
         } ?: ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null)
     }
 
@@ -42,9 +42,10 @@ class UserController(private val userService: UserService) {
         }
 
     @DeleteMapping("/{uuid}")
-    fun deleteByUUID(@PathVariable uuid: UUID): ResponseEntity<Void> {
+    fun deleteByUUID(@Valid @PathVariable uuid: UUID): ResponseEntity<String> {
         userService.deleteByUUID(uuid)
-        return ResponseEntity.noContent().build()
+
+        return ResponseEntity.ok("usuario deletado com sucesso !")
     }
 
     private fun UserRequest.toModel(role: Role): User = User(

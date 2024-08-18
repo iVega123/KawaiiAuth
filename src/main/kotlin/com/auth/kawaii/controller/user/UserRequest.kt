@@ -3,8 +3,8 @@ package com.auth.kawaii.controller.user
 import jakarta.validation.constraints.NotBlank
 
 data class UserRequest(
-    @field:NotBlank(message = "Email must not be blank")
+    @field:NotBlank(message = "digite pelo menos um caracte")
     val email: String,
-    @field:NotBlank(message = "Password must not be blank")
+    @field:NotBlank(message = "digite pelo menos um carectere")
     val password: String,
 )
