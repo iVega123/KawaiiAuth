@@ -11,52 +11,48 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
-import java.security.Security
-
 
 @Component
 class JwtAuthenticationFilter(
     private val userDetailsService: CustomUserDetailsService,
     private val tokenService: TokenService
-
-) : OncePerRequestFilter(){
+) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val authHeader: String? = request.getHeader("authorization")
+        val authHeader: String? = request.getHeader("Authorization")
 
-        if(authHeader.doesNotContainBearerToken()){
+        if (authHeader.doesNotContainBearerToken()) {
             filterChain.doFilter(request, response)
             return
         }
-        val jwtToken = authHeader!!.extractTokenValue()
-        val email = tokenService.extractEmail(jwtToken)
 
-        if(email != null && SecurityContextHolder.getContext().authentication == null){
+        val jwtToken = authHeader!!.extractTokenValue()
+        val email = tokenService.extractUsername(jwtToken)
+
+        if (email != null && SecurityContextHolder.getContext().authentication == null) {
             val foundUser = userDetailsService.loadUserByUsername(email)
 
-            if(tokenService.isValid(jwtToken, foundUser)){
+            if (!tokenService.isExpired(jwtToken)) {
                 updateContext(foundUser, request)
-
             }
-            filterChain.doFilter(request, response)
         }
+
+        filterChain.doFilter(request, response)
     }
 
     private fun updateContext(foundUser: UserDetails, request: HttpServletRequest) {
-     val authToken = UsernamePasswordAuthenticationToken(foundUser, null, foundUser.authorities)
-     authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
-
+        val authToken = UsernamePasswordAuthenticationToken(foundUser, null, foundUser.authorities)
+        authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
         SecurityContextHolder.getContext().authentication = authToken
-
     }
 
     private fun String?.doesNotContainBearerToken(): Boolean =
-    this == null || !this.startsWith("Bearer")
+        this == null || !this.startsWith("Bearer ")
 
     private fun String.extractTokenValue(): String =
-        this.substringAfter("Bearer")
+        this.substringAfter("Bearer ")
 }

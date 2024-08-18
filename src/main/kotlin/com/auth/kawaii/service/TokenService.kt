@@ -4,57 +4,32 @@ import com.auth.kawaii.config.JwtProperties
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
-import java.util.Date
+import java.util.*
 
 @Service
-class TokenService (
-    jwtProperties: JwtProperties
-) {
-    private val secretKey = Keys.hmacShaKeyFor(
-        jwtProperties.key.toByteArray()
-    )
+class TokenService(private val jwtProperties: JwtProperties) {
+    private val secretKey = Keys.hmacShaKeyFor(jwtProperties.key.toByteArray())
 
-    fun generate(
-        userDetails: UserDetails,
-        expirationDate: Date,
-        additionalClaims: Map<String, Any> = emptyMap()
-    ): String =
-        Jwts.builder()
-            .expiration(expirationDate)
-            .claims()
-            .subject(userDetails.username)
-            .issuedAt(Date(System.currentTimeMillis()))
-            .add(additionalClaims)
-            .and()
-            .signWith(secretKey)
-            .compact()
+    fun generateAccessToken(username: String): String = Jwts.builder()
+        .subject(username)
+        .expiration(Date(System.currentTimeMillis() + jwtProperties.accessTokenExpiration))
+        .signWith(secretKey, Jwts.SIG.HS512)
+        .compact()
 
-    fun extractEmail(token: String): String? =
-        getAllClaims(token)
-            .subject
+    fun generateRefreshToken(username: String): String = Jwts.builder()
+        .subject(username)
+        .expiration(Date(System.currentTimeMillis() + jwtProperties.refreshTokenExpiration))
+        .signWith(secretKey, Jwts.SIG.HS512)
+        .compact()
 
-    fun isExpired(token: String) : Boolean =
-        getAllClaims(token)
-            .expiration
-            .before(Date(System.currentTimeMillis()))
+    fun extractUsername(token: String): String? = getAllClaims(token).subject
 
-    fun isValid(token: String, userDetails: UserDetails): Boolean{
-        val email = extractEmail(token)
+    fun isExpired(token: String): Boolean = getAllClaims(token).expiration.before(Date())
 
-
-        return userDetails.username == email && !isExpired(token)
-    }
-
-    private fun getAllClaims(token: String): Claims{
-        val parser = Jwts.parser()
-            .verifyWith(secretKey)
-            .build()
-
-        return parser
-            .parseSignedClaims(token.trim())
-            .payload
-
-    }
+    private fun getAllClaims(token: String): Claims = Jwts.parser()
+        .verifyWith(secretKey)
+        .build()
+        .parseSignedClaims(token)
+        .payload
 }
