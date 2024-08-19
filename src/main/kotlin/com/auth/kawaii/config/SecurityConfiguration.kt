@@ -23,7 +23,7 @@ class SecurityConfiguration(
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it
-                    .requestMatchers("/api/auth", "/api/auth/refresh", "/error").permitAll()
+                    .requestMatchers("/api/auth", "/api/auth/patreon", "/api/auth/patreon-auth",  "/api/auth/refresh", "/error").permitAll()
                     .requestMatchers("/swagger-ui/**").permitAll()
                     .requestMatchers("/v3/api-docs/**").permitAll()
                     .requestMatchers("/api/user**").hasRole("Admin")

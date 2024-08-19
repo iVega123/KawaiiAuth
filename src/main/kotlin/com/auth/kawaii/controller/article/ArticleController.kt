@@ -24,7 +24,4 @@ class ArticleController (
             title = this.title,
             content = this.content
         )
-
-
-
 }
