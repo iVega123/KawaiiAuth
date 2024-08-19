@@ -2,6 +2,7 @@ package com.auth.kawaii.service
 
 import com.auth.kawaii.model.User
 import com.auth.kawaii.repository.UserRepository
+import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
@@ -27,5 +28,6 @@ class UserService(
 
     fun deleteByUUID(uuid: UUID) {
         userRepository.deleteById(uuid)
+
     }
 }

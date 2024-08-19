@@ -24,6 +24,9 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("jakarta.validation:jakarta.validation-api:3.1.0")
 	implementation("org.springframework.boot:spring-boot-starter-validation:3.3.2")
+	implementation("com.patreon:patreon:0.4.2") {
+		exclude(group = "org.slf4j", module = "slf4j-reload4j")
+	}
 
 	implementation("io.jsonwebtoken:jjwt-api:0.12.3")
 	implementation("io.jsonwebtoken:jjwt-impl:0.12.3")
