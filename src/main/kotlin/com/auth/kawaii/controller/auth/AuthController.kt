@@ -1,6 +1,5 @@
 package com.auth.kawaii.controller.auth
 
-import com.auth.kawaii.model.PatreonUserModel
 import com.auth.kawaii.service.AuthenticationService
 import com.auth.kawaii.service.PatreonService
 import org.springframework.beans.factory.annotation.Value
@@ -54,10 +53,10 @@ class AuthController(
     fun redirectToPatreon(): String {
         try {
             val url = "$authorizeUrl?response_type=code&client_id=$clientId&redirect_uri=$redirectUri&scope=identity"
-            return url;
+            return url
         } catch (e: Exception) {
             e.printStackTrace()
-            return e.message.toString();
+            return e.message.toString()
         }
     }
 
